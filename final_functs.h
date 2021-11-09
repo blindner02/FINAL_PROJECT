@@ -13,4 +13,4 @@
 * @pre user inputs a valid nt
 * @post none
 */
-void drawPlot2();
+void drawPlot();

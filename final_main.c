@@ -15,5 +15,5 @@
 #include "final_functs.h"
 
 int main(){
-    drawPlot2();
+    drawPlot();
 }

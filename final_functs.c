@@ -16,7 +16,7 @@
 #include "supportLib.h"
 #include "final_functs.h"
 
-void drawPlot2(){
+void drawPlot(){
     _Bool success;
     StringReference *errorMessage;
 
