@@ -13,6 +13,6 @@
 * @pre user inputs a valid nt
 * @post none
 */
-void drawPlot();
+void plotData(double xs [], double ys [], int numItems);
 
 FILE* openFile(char* fileName);
