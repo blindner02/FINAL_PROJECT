@@ -73,3 +73,13 @@ void drawPlot(){
         fprintf(stderr, "\n");
     }
 }
+
+FILE* openFile(char* fileName){
+	FILE* inFile = fopen(fileName, "r");
+	if (fileName == NULL){
+		fprintf(stderr, "Could not open file \"%s\"", fileName);  
+        fprintf(stderr, " - terminating\n"); 
+		exit(-1);
+	}
+	return inFile;
+}
