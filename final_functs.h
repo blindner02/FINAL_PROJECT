@@ -14,3 +14,5 @@
 * @post none
 */
 void drawPlot();
+
+FILE* openFile(char* fileName);
