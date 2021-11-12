@@ -73,3 +73,11 @@ FILE* openFile(char* fileName){
 	}
 	return inFile;
 }
+void toAccelStruct(FILE* fileName, MPU9250 acceleration[]){
+	double value = 0.0;
+	int count = 0;
+	int i = 0;
+	while(!feof(fileName)){
+		
+	}
+}

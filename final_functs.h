@@ -3,8 +3,25 @@
  * Name: Brandon Lindner
  * Section: T1B-T2B
  * Project: FINAL PROJECT
- * Purpose: PARSE FLIGHT DATA FILES FROM A ROCKET AND FIND ESSENTIAL DATA AND GRAPH IT
+ * Purpose: PARSE FLIGHT FILES FROM A ROCKET AND FIND ESSENTIAL DATA AND GRAPH IT
  * =========================================================== */ 
+
+#ifndef FINAL_PROJECT_FUNCTS
+#define FINAL_PROJECT_FUNCTS
+typedef struct MPU9250{
+    double accelX;
+    double accelY;
+    double accelZ;
+    double pitch;
+    double roll;
+    double yaw;
+    double time;
+}MPU9250;
+
+typedef struct BMP390{
+    double altitude;
+    double time;
+}BMP390;
 
 /**
 * @brief receives an int from the user
@@ -16,3 +33,5 @@
 void plotData(double xs [], double ys [], int numItems);
 
 FILE* openFile(char* fileName);
+
+#endif
