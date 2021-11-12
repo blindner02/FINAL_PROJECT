@@ -73,6 +73,8 @@ FILE* openFile(char* fileName){
 	}
 	return inFile;
 }
+
+// OUTSOURCING DATA FILES FROM ROCKETRY COMMUNITY (trying to at least)
 void toAccelStruct(FILE* fileName, MPU9250 acceleration[]){
 	double value = 0.0;
 	int count = 0;
