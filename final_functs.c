@@ -32,7 +32,7 @@ void plotData(double xs [], double ys [], int numItems){
 	series->color = GetGray(0.3);
 
 	ScatterPlotSettings *settings = GetDefaultScatterPlotSettings();
-	settings->width = 925;
+	settings->width = 700;
 	settings->height = 400;
 	settings->autoBoundaries = true;
 	settings->autoPadding = true;
@@ -80,12 +80,13 @@ void toAccelStruct(FILE* fileName, MPU9250 acceleration[]){
 	int count = 0;
 	int i = 0;
 	char line[MAX_LINE_LENGTH];
-	
+
+	fgets(line, MAX_LINE_LENGTH, fileName);
+
 	while(!feof(fileName)){
 		acceleration = (MPU9250*)realloc(acceleration, (count + 1) * sizeof(MPU9250));
-		fscanf(fileName, "%lf,%lf,%lf,%lf,%lf,%lf,%lf", &acceleration[count].accelX, &acceleration[count].accelY, 
-		&acceleration[count].accelZ, &acceleration[count].pitch, &acceleration[count].roll, &acceleration[count].yaw,
-		&acceleration[count].time);
+		fscanf(fileName, "%lf,%lf,%lf", &acceleration[count].time, &acceleration[count].accelX, &acceleration[count].accelY);
 		count++;
 	}
+	fclose(fileName);
 }
