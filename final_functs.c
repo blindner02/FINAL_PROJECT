@@ -79,7 +79,13 @@ void toAccelStruct(FILE* fileName, MPU9250 acceleration[]){
 	double value = 0.0;
 	int count = 0;
 	int i = 0;
+	char line[MAX_LINE_LENGTH];
+	
 	while(!feof(fileName)){
-		
+		acceleration = (MPU9250*)realloc(acceleration, (count + 1) * sizeof(MPU9250));
+		fscanf(fileName, "%lf,%lf,%lf,%lf,%lf,%lf,%lf", &acceleration[count].accelX, &acceleration[count].accelY, 
+		&acceleration[count].accelZ, &acceleration[count].pitch, &acceleration[count].roll, &acceleration[count].yaw,
+		&acceleration[count].time);
+		count++;
 	}
 }

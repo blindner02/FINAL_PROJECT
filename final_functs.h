@@ -8,14 +8,11 @@
 
 #ifndef FINAL_PROJECT_FUNCTS
 #define FINAL_PROJECT_FUNCTS
+#define MAX_LINE_LENGTH 1024
 typedef struct MPU9250{
+    double time;
     double accelX;
     double accelY;
-    double accelZ;
-    double pitch;
-    double roll;
-    double yaw;
-    double time;
 }MPU9250;
 
 typedef struct BMP390{
@@ -33,5 +30,7 @@ typedef struct BMP390{
 void plotData(double xs [], double ys [], int numItems);
 
 FILE* openFile(char* fileName);
+
+void toAccelStruct(FILE* fileName, MPU9250 acceleration[]);
 
 #endif
