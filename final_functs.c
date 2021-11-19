@@ -53,7 +53,7 @@ void plotData(double xs [], double ys [], int numItems){
 	if(success){
         size_t length;
         double *pngdata = ConvertToPNG(&length, canvasReference->image);
-        WriteToFile(pngdata, length, "data1.png");
+        WriteToFile(pngdata, length, "dataNew.png");
         DeleteImage(canvasReference->image);
 	}else{
         fprintf(stderr, "Error: ");
@@ -75,18 +75,29 @@ FILE* openFile(char* fileName){
 }
 
 // OUTSOURCING DATA FILES FROM ROCKETRY COMMUNITY (trying to at least)
-void toAccelStruct(FILE* fileName, MPU9250 acceleration[]){
+void toAccelStruct(FILE* fileName, MPU9250 acceleration[], int numLines){
 	double value = 0.0;
 	int count = 0;
 	int i = 0;
 	char line[MAX_LINE_LENGTH];
-
 	fgets(line, MAX_LINE_LENGTH, fileName);
 
-	while(!feof(fileName)){
-		acceleration = (MPU9250*)realloc(acceleration, (count + 1) * sizeof(MPU9250));
-		fscanf(fileName, "%lf,%lf,%lf", &acceleration[count].time, &acceleration[count].accelX, &acceleration[count].accelY);
+	while(count <= numLines){
+		fscanf(fileName, "%lf,%lf,%lf\n", &acceleration[count].time, &acceleration[count].accelX, &acceleration[count].accelY);
+		if(count % 1000 == 1){
+			printf("%lf %lf %lf \n", acceleration[count].time, acceleration[count].accelX, acceleration[count].accelY);
+		}
 		count++;
 	}
 	fclose(fileName);
+}
+
+int countLines(FILE* fp){
+	int count = 0;
+	for(int c = getc(fp); c != EOF; c = getc(fp)){
+        if(c == '\n'){
+        	count = count + 1;
+		}
+	}
+	return count;
 }

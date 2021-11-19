@@ -31,6 +31,8 @@ void plotData(double xs [], double ys [], int numItems);
 
 FILE* openFile(char* fileName);
 
-void toAccelStruct(FILE* fileName, MPU9250 acceleration[]);
+void toAccelStruct(FILE* fileName, MPU9250 acceleration[], int numLines);
+
+int countLines(FILE* fileName);
 
 #endif

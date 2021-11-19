@@ -22,7 +22,8 @@
         "type_traits": "cpp",
         "unordered_map": "cpp",
         "vector": "cpp",
-        "ios": "c"
+        "ios": "c",
+        "final_functs.h": "c"
     },
     "code-runner.defaultLanguage": "c",
     "code-runner.runInTerminal": true,
