@@ -28,7 +28,7 @@ void plotData(double xs [], double ys [], int numItems){
 	series->linearInterpolation = true;
 	series->lineType = L"solid";
 	series->lineTypeLength = wcslen(series->lineType);
-	series->lineThickness = 2;
+	series->lineThickness = 1;
 	series->color = GetGray(0.3);
 
 	ScatterPlotSettings *settings = GetDefaultScatterPlotSettings();
@@ -75,29 +75,38 @@ FILE* openFile(char* fileName){
 }
 
 // OUTSOURCING DATA FILES FROM ROCKETRY COMMUNITY (trying to at least)
-void toAccelStruct(FILE* fileName, MPU9250 acceleration[], int numLines){
+void toAccelStruct(FILE* inFile, MPU9250 acceleration[], int numLines){
 	double value = 0.0;
 	int count = 0;
 	int i = 0;
 	char line[MAX_LINE_LENGTH];
-	fgets(line, MAX_LINE_LENGTH, fileName);
+	fgets(line, MAX_LINE_LENGTH, inFile);
 
-	while(count <= numLines){
-		fscanf(fileName, "%lf,%lf,%lf\n", &acceleration[count].time, &acceleration[count].accelX, &acceleration[count].accelY);
-		if(count % 1000 == 1){
+	while(count < numLines){
+		if(count % 1000 == 0){
+			fscanf(inFile, "%lf,%lf,%lf", &acceleration[count].time, &acceleration[count].accelX, &acceleration[count].accelY);
 			printf("%lf %lf %lf \n", acceleration[count].time, acceleration[count].accelX, acceleration[count].accelY);
 		}
 		count++;
 	}
-	fclose(fileName);
 }
 
 int countLines(FILE* fp){
 	int count = 0;
-	for(int c = getc(fp); c != EOF; c = getc(fp)){
-        if(c == '\n'){
-        	count = count + 1;
-		}
+	// for(int c = getc(fp); c != EOF; c = getc(fp)){
+    //     if(c == '\n'){
+    //     	count += 1;
+	// 	}
+	// }
+	char line[MAX_LINE_LENGTH];
+
+	// Get rid of the title row of information
+	fgets(line, MAX_LINE_LENGTH, fp);
+
+	// Iterate through the whole file and count number of lines
+	while(!feof(fp)){
+		fgets(line, MAX_LINE_LENGTH, fp);
+		count++;
 	}
 	return count;
 }

@@ -23,7 +23,8 @@
         "unordered_map": "cpp",
         "vector": "cpp",
         "ios": "c",
-        "final_functs.h": "c"
+        "final_functs.h": "c",
+        "stdio.h": "c"
     },
     "code-runner.defaultLanguage": "c",
     "code-runner.runInTerminal": true,
