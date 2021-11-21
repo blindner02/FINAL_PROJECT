@@ -24,7 +24,9 @@
         "vector": "cpp",
         "ios": "c",
         "final_functs.h": "c",
-        "stdio.h": "c"
+        "stdio.h": "c",
+        "stdlib.h": "c",
+        "math.h": "c"
     },
     "code-runner.defaultLanguage": "c",
     "code-runner.runInTerminal": true,

@@ -20,7 +20,15 @@ int main(){
 
 	int numLines = countLines(test);
 	printf("%d\n", numLines);
+	fclose(test);
+	test = openFile("latAccel2.csv");
 	MPU9250* accel = (MPU9250*)malloc(sizeof(MPU9250) * numLines);
+
+	double time[numLines];
+	double accelX[numLines];
+	double accelY[numLines];
+
     toAccelStruct(test, accel, numLines);
-	plotData(&accel->time, &accel->accelX, numLines);
+	toArrays(time, accelX, accelY, accel, numLines);
+	plotData("X - Acceleration", "time (s)", "acceleration (m/s/s)", time, accelX, numLines);
 }
