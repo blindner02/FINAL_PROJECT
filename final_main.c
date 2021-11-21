@@ -30,5 +30,5 @@ int main(){
 
     toAccelStruct(test, accel, numLines);
 	toArrays(time, accelX, accelY, accel, numLines);
-	plotData("X - Acceleration", "time (s)", "acceleration (m/s/s)", time, accelX, numLines);
+	plotData("X - Acceleration", "time (s)", "acceleration (m/s/s)", "xAccel.png", time, accelX, numLines);
 }

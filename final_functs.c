@@ -16,7 +16,7 @@
 #include "supportLib.h"
 #include "final_functs.h"
 
-void plotData(char* title, char* xAxis, char* yAxis, double xs [], double ys [], int numItems){
+void plotData(char* title, char* xAxis, char* yAxis, char* fileName, double xs [], double ys [], int numItems){
     _Bool success;
     StringReference *errorMessage;
 
@@ -35,6 +35,8 @@ void plotData(char* title, char* xAxis, char* yAxis, double xs [], double ys [],
 	settings->height = 400;
 	settings->autoBoundaries = true;
 	settings->autoPadding = true;
+	// THERE IS NO EASY WAY TO CHANGE THE TITLES WITHOUT CHANGING THE SOURCE OF pbPlots 
+	// SO I HAD TO DO ALL THE strcmp() TO SET THE TITLES 
 	if(strcmp(title, "X - Acceleration") == 0){
 		settings->title = L"X - Acceleration";
 	}
@@ -66,7 +68,7 @@ void plotData(char* title, char* xAxis, char* yAxis, double xs [], double ys [],
 	if(success){
         size_t length;
         double *pngdata = ConvertToPNG(&length, canvasReference->image);
-        WriteToFile(pngdata, length, "dataNew.png");
+        WriteToFile(pngdata, length, fileName);
         DeleteImage(canvasReference->image);
 	}else{
         fprintf(stderr, "Error: ");
@@ -89,22 +91,15 @@ FILE* openFile(char* fileName){
 
 int countLines(FILE* fp){
 	int count = 0;
-	// for(int c = getc(fp); c != EOF; c = getc(fp)){
-    //     if(c == '\n'){
-    //     	count += 1;
-	// 	}
-	// }
 	char line[MAX_LINE_LENGTH];
 
-	// Get rid of the title row of information
+	// GET RID OF THE TITLE LINE
 	fgets(line, MAX_LINE_LENGTH, fp);
 
-	// Iterate through the whole file and count number of lines
 	while(!feof(fp)){
 		fgets(line, MAX_LINE_LENGTH, fp);
 		count++;
 	}
-
 	return count;
 }
 
@@ -128,6 +123,9 @@ void toAccelStruct(FILE* inFile, MPU9250 acceleration[], int numLines){
 void toArrays(double time [], double accelX [], double accelY [], MPU9250* accel, int numLines){
 	for(int i = 0; i < numLines; i++){
 		time[i] = accel[i].time;
+
+		// FILTER OUT THE OUTLIERS TO AN EXTENT
+		// CONVERT THE DATA FROM G's TO (m/s/s)
 		if(9.80665 * accel[i].accelX < 150.0 && 9.80665 * accel[i].accelX > -150.0){
 			accelX[i] = 9.80665 * accel[i].accelX;
 		}

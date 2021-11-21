@@ -27,7 +27,7 @@ typedef struct BMP390{
 * @pre user inputs a valid nt
 * @post none
 */
-void plotData(char* title, char* xAxis, char* yAxis, double xs [], double ys [], int numItems);
+void plotData(char* title, char* xAxis, char* yAxis, char* fileName, double xs [], double ys [], int numItems);
 
 FILE* openFile(char* fileName);
 
@@ -36,5 +36,7 @@ int countLines(FILE* fileName);
 void toAccelStruct(FILE* fileName, MPU9250 acceleration[], int numLines);
 
 void toArrays(double time [], double accelX [], double accelY [], MPU9250* accel, int numLines);
+
+void findVelAndPos();
 
 #endif
