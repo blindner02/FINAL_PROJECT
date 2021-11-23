@@ -37,6 +37,6 @@ void toAccelStruct(FILE* fileName, MPU9250 acceleration[], int numLines);
 
 void toArrays(double time [], double accelX [], double accelY [], MPU9250* accel, int numLines);
 
-void findVelAndPos();
+void findVelAndPos(double time [], double accelX [], double accelY [], MPU9250* accel, int numLines, double veloX [], double veloY [], double posX [], double posY []);
 
 #endif

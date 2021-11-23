@@ -12,6 +12,7 @@
 #include <string.h>
 #include <wchar.h>
 #include <stdio.h>
+#include <unistd.h>
 #include "pbPlots.h"
 #include "supportLib.h"
 #include "final_functs.h"
@@ -35,6 +36,7 @@ void plotData(char* title, char* xAxis, char* yAxis, char* fileName, double xs [
 	settings->height = 400;
 	settings->autoBoundaries = true;
 	settings->autoPadding = true;
+	
 	// THERE IS NO EASY WAY TO CHANGE THE TITLES WITHOUT CHANGING THE SOURCE OF pbPlots 
 	// SO I HAD TO DO ALL THE strcmp() TO SET THE TITLES 
 	if(strcmp(title, "X - Acceleration") == 0){
@@ -110,11 +112,11 @@ void toAccelStruct(FILE* inFile, MPU9250 acceleration[], int numLines){
 	int i = 0;
 	char line[MAX_LINE_LENGTH];
 	fgets(line, MAX_LINE_LENGTH, inFile);
-
+	printf("%8s %8s %8s\n", "time (s)", "x-accel", "y-accel");
 	while(count < numLines){
 		fscanf(inFile, "%lf,%lf,%lf", &acceleration[count].time, &acceleration[count].accelX, &acceleration[count].accelY);
 		if(count % 1000 == 0){
-			printf("%lf %lf %lf \n", acceleration[count].time, acceleration[count].accelX, acceleration[count].accelY);
+			printf("%lf %lf %lf \n", acceleration[count].time, 9.80665 * acceleration[count].accelX, 9.80665 * acceleration[count].accelY);
 		}
 		count++;
 	}
@@ -138,5 +140,19 @@ void toArrays(double time [], double accelX [], double accelY [], MPU9250* accel
 		else{
 			accelY[i] = 0.0;
 		}
+	}
+}
+void findVelAndPos(double time [], double accelX [], double accelY [], MPU9250* accel, int numLines, double veloX [], double veloY [], double posX [], double posY []){
+	for(int i = 0; i < numLines - 1; i++){
+		veloX[i] = 0.5 * (time[i + 1] - time[i]) * (accelX[i + 1] + accelX[i]);
+	}
+	for(int i = 0; i < numLines - 1; i++){
+		veloY[i] = 0.5 * (time[i + 1] - time[i]) * (accelY[i + 1] + accelY[i]);
+	}
+	for(int i = 0; i < numLines - 2; i++){
+		posX[i] = 0.5 * (time[i + 1] - time[i]) * (veloX[i + 1] + veloX[i]);
+	}
+	for(int i = 0; i < numLines - 2; i++){
+		posY[i] = 0.5 * (time[i + 1] - time[i]) * (veloY[i + 1] + veloY[i]);
 	}
 }

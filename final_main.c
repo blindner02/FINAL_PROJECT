@@ -12,6 +12,7 @@
 #include <math.h>
 #include <string.h>
 #include <stdio.h>
+#include <unistd.h>
 #include "final_functs.h"
 
 int main(){
@@ -24,11 +25,18 @@ int main(){
 	test = openFile("latAccel2.csv");
 	MPU9250* accel = (MPU9250*)malloc(sizeof(MPU9250) * numLines);
 
-	double time[numLines];
-	double accelX[numLines];
-	double accelY[numLines];
+	double* time = (double*)malloc(sizeof(double) * numLines);
+	double* accelX = (double*)malloc(sizeof(double) * numLines);
+	double* accelY = (double*)malloc(sizeof(double) * numLines);
+	double* veloX = (double*)malloc(sizeof(double) * numLines - 1);
+	double* veloY = (double*)malloc(sizeof(double) * numLines - 1);
+	double* posX = (double*)malloc(sizeof(double) * numLines - 2);
+	double* posY = (double*)malloc(sizeof(double) * numLines - 2);
 
     toAccelStruct(test, accel, numLines);
 	toArrays(time, accelX, accelY, accel, numLines);
 	plotData("X - Acceleration", "time (s)", "acceleration (m/s/s)", "xAccel.png", time, accelX, numLines);
+	plotData("Y - Acceleration", "time (s)", "acceleration (m/s/s)", "yAccel.png", time, accelY, numLines);
+	findVelAndPos(time, accelX, accelY, accel, numLines, veloX, veloY, posX, posY);
+	plotData("Y - Acceleration", "time (s)", "acceleration (m/s/s)", "test.png", time, posX, numLines - 2);
 }
