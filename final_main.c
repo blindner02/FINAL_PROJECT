@@ -59,6 +59,7 @@ int main(){
 	plotData("Y - Acceleration", "time (s)", "acceleration (m/s/s)", "yAccel.png", time, allAccel[2], numLines);
 	plotData("Z - Acceleration", "time (s)", "acceleration (m/s/s)", "zAccel.png", time, allAccel[3], numLines);
 	plotData("Barometric Altitde", "time (s)", "altitude (m)", "baroAlt.png", time, baroAlt, numLines);
+	plotData("Barometric Altitde", "time (s)", "altitude (m)", "gyroRoll.png", time, allGyro[1], numLines - 1);
 	//xyPos = findVelAndPos(xyPos, time, accelX, accelY, bigAccel, numLines, veloX, veloY, posX, posY);
 	//printf("X - Position (m): %lf\nY - Position (m): %lf\n", xyPos.xpos, xyPos.ypos);
 	//plotData("X - Velocity", "time (s)", "velocity (m/s)", "test.png", time, veloX, numLines - 2);

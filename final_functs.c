@@ -151,56 +151,47 @@ void toArrays(double time [], double baroAlt [], MPU9250* accel, GYRO* gyro, BMP
 	double* gyroPitch = (double*)malloc(sizeof(double) * numLines);
 	double* gyroYaw = (double*)malloc(sizeof(double) * numLines);
 	
+
 	for(int i = 0; i < numLines; i++){
 		time[i] = accel[i].time;
 
-		// FILTER OUT THE OUTLIERS TO AN EXTENT
 		// CONVERT THE DATA FROM G's TO (m/s/s)
-		//if(9.80665 * accel[i].accelX < 150.0 && 9.80665 * accel[i].accelX > -150.0){
-			accelX[i] = (accel[i].accelX / 2023) * 9.80665;
-			accel[i].accelX = accelX[i];
-		//}
-		/*else{
-			accelX[i] = 0.0;
-		}*/
-		//if(9.80665 * accel[i].accelY < 150.0 && 9.80665 * accel[i].accelY > -150.0){
-			accelY[i] = (accel[i].accelY / 2023) * 9.80665;
-			accel[i].accelY = accelY[i];
-		//}
-		/*else{
-			accelY[i] = 0.0;
-		}*/
-			accelZ[i] = ((accel[i].accelZ / 2023) * 9.80665) - 9.80665;
-			accel[i].accelZ = accelZ[i];
+		accelX[i] = (accel[i].accelX / 2023) * 9.80665;
+		accel[i].accelX = accelX[i];
+		
+		accelY[i] = (accel[i].accelY / 2023) * 9.80665;
+		accel[i].accelY = accelY[i];
+	
+		accelZ[i] = ((accel[i].accelZ / 2023) * 9.80665) - 9.80665;
+		accel[i].accelZ = accelZ[i];
 
-			baroAlt[i] = baro[i].altitude / 100;
-			baro[i].altitude = baroAlt[i];
+		baroAlt[i] = baro[i].altitude / 100;
+		baro[i].altitude = baroAlt[i];
 
-			if(i > 0){
-				delta_timeR = time[i] - time[i - 1];
-				delta_angleR = gyro[g].angleRoll * delta_timeR; 
-				if(g == 0){
-					gyroRoll[g] = delta_angleR;
-				}
-				gyroRoll[g] = delta_angleR + gyroRoll[g - 1];
-
-				delta_timeP = time[i] - time[i - 1];
-				delta_angleP = gyro[g].anglePitch * delta_timeP; 
-				if(g == 0){
-					gyroPitch[g] = delta_angleP;
-				}
-				gyroPitch[g] = delta_angleP + gyroPitch[g - 1];
-
-				delta_timeY = time[i] - time[i - 1];
-				delta_angleY = gyro[g].angleYaw * delta_timeY; 
-				if(g == 0){
-					gyroYaw[g] = delta_angleY;
-				}
-				gyroYaw[g] = delta_angleY + gyroYaw[g - 1];
-
-				g++;
+		if(i > 0){
+			delta_timeR = time[i] - time[i - 1];
+			delta_angleR = gyro[g].angleRoll * delta_timeR; 
+			if(g == 0){
+				gyroRoll[g] = delta_angleR;
 			}
+			gyroRoll[g] = delta_angleR + gyroRoll[g - 1];
 
+			delta_timeP = time[i] - time[i - 1];
+			delta_angleP = gyro[g].anglePitch * delta_timeP; 
+			if(g == 0){
+				gyroPitch[g] = delta_angleP;
+			}
+			gyroPitch[g] = delta_angleP + gyroPitch[g - 1];
+
+			delta_timeY = time[i] - time[i - 1];
+			delta_angleY = gyro[g].angleYaw * delta_timeY; 
+			if(g == 0){
+				gyroYaw[g] = delta_angleY;
+			}
+			gyroYaw[g] = delta_angleY + gyroYaw[g - 1];
+
+			g++;
+		}
 	}
 
 	allAccel[0] = time;
@@ -212,8 +203,28 @@ void toArrays(double time [], double baroAlt [], MPU9250* accel, GYRO* gyro, BMP
 	allGyro[1] = gyroPitch;
 	allGyro[2] = gyroYaw;
 
+	// My attempt at some sort of a filter
+	double offsetR = gyroRoll[numLines - 2] / time[numLines - 1];
+	double offsetP = gyroPitch[numLines - 2] / time[numLines - 1];
+	double offsetY = gyroYaw[numLines - 2] / time[numLines - 1];
+
+	for(int j = 0; j < numLines - 1; j++){
+		gyroRoll[j] = gyroRoll[j] - (time[j] * offsetR);
+		gyroPitch[j] = gyroPitch[j] - (time[j] * offsetP);
+		gyroYaw[j] = gyroYaw[j] - (time[j] * offsetY);
+	}
+
+	allGyro[0] = gyroRoll;
+	allGyro[1] = gyroPitch;
+	allGyro[2] = gyroYaw;
+
+
+	printf("Offsets: %lf %lf %lf\n", offsetR, offsetP, offsetY);
+
 	printf("%lf %lf %lf %lf\n", allAccel[0][0], allAccel[1][0], allAccel[2][0], allAccel[3][0]);
+	printf("%lf %lf %lf\n", allGyro[0][100], allGyro[1][100], allGyro[2][100]);
 }
+
 position findVelAndPos(position xyPos, double* accel[], double* gyro[], double* baro, int numLines, double posX [], double posY []){
 	//double dispX = 0.0;
 	//double dispY = 0.0;
