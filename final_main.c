@@ -33,10 +33,13 @@ int main(){
 	double* posX = (double*)malloc(sizeof(double) * numLines - 2);
 	double* posY = (double*)malloc(sizeof(double) * numLines - 2);
 
+	position xyPos;
+
     toAccelStruct(test, accel, numLines);
 	toArrays(time, accelX, accelY, accel, numLines);
 	plotData("X - Acceleration", "time (s)", "acceleration (m/s/s)", "xAccel.png", time, accelX, numLines);
 	plotData("Y - Acceleration", "time (s)", "acceleration (m/s/s)", "yAccel.png", time, accelY, numLines);
-	findVelAndPos(time, accelX, accelY, accel, numLines, veloX, veloY, posX, posY);
-	plotData("Y - Acceleration", "time (s)", "acceleration (m/s/s)", "test.png", time, posX, numLines - 2);
+	xyPos = findVelAndPos(xyPos, time, accelX, accelY, accel, numLines, veloX, veloY, posX, posY);
+	printf("X - Position (m): %lf\nY - Position (m): %lf\n", xyPos.xpos, xyPos.ypos);
+	plotData("X - Velocity", "time (s)", "velocity (m/s)", "test.png", time, veloX, numLines - 2);
 }

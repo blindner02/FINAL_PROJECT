@@ -48,6 +48,12 @@ void plotData(char* title, char* xAxis, char* yAxis, char* fileName, double xs [
 	if(strcmp(title, "Barometric Altitude") == 0){
 		settings->title = L"Barometric Altitude";
 	}
+	if(strcmp(title, "X - Velocity") == 0){
+		settings->title = L"X - Velocity";
+	}
+	if(strcmp(title, "Y - Velocity") == 0){
+		settings->title = L"Y - Velocity";
+	}
     settings->titleLength = wcslen(settings->title);
     if(strcmp(xAxis, "time (s)") == 0){
 		settings->xLabel = L"time (s)";
@@ -55,6 +61,9 @@ void plotData(char* title, char* xAxis, char* yAxis, char* fileName, double xs [
     settings->xLabelLength = wcslen(settings->xLabel);
     if(strcmp(yAxis, "acceleration (m/s/s)") == 0){
 		settings->yLabel = L"acceleration (m/s/s)";
+	}
+	if(strcmp(yAxis, "velocity (m/s)") == 0){
+		settings->yLabel = L"velocity (m/s)";
 	}
 	if(strcmp(yAxis, "altitude (ft)") == 0){
 		settings->yLabel = L"altitude (ft)";
@@ -142,7 +151,9 @@ void toArrays(double time [], double accelX [], double accelY [], MPU9250* accel
 		}
 	}
 }
-void findVelAndPos(double time [], double accelX [], double accelY [], MPU9250* accel, int numLines, double veloX [], double veloY [], double posX [], double posY []){
+position findVelAndPos(position xyPos, double time [], double accelX [], double accelY [], MPU9250* accel, int numLines, double veloX [], double veloY [], double posX [], double posY []){
+	double dispX = 0.0;
+	double dispY = 0.0;
 	for(int i = 0; i < numLines - 1; i++){
 		veloX[i] = 0.5 * (time[i + 1] - time[i]) * (accelX[i + 1] + accelX[i]);
 	}
@@ -151,8 +162,13 @@ void findVelAndPos(double time [], double accelX [], double accelY [], MPU9250* 
 	}
 	for(int i = 0; i < numLines - 2; i++){
 		posX[i] = 0.5 * (time[i + 1] - time[i]) * (veloX[i + 1] + veloX[i]);
+		dispX = dispX + (0.5 * (time[i + 1] - time[i]) * (veloX[i + 1] + veloX[i]));
 	}
 	for(int i = 0; i < numLines - 2; i++){
 		posY[i] = 0.5 * (time[i + 1] - time[i]) * (veloY[i + 1] + veloY[i]);
+		dispY = dispY + (0.5 * (time[i + 1] - time[i]) * (veloY[i + 1] + veloY[i]));
 	}
+	xyPos.xpos = dispX;
+	xyPos.ypos = dispY;
+	return (xyPos);
 }

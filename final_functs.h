@@ -20,6 +20,11 @@ typedef struct BMP390{
     double time;
 }BMP390;
 
+typedef struct position{
+    double xpos;
+    double ypos;
+}position;
+
 /**
 * @brief receives an int from the user
 * @param none
@@ -37,6 +42,6 @@ void toAccelStruct(FILE* fileName, MPU9250 acceleration[], int numLines);
 
 void toArrays(double time [], double accelX [], double accelY [], MPU9250* accel, int numLines);
 
-void findVelAndPos(double time [], double accelX [], double accelY [], MPU9250* accel, int numLines, double veloX [], double veloY [], double posX [], double posY []);
+position findVelAndPos(position xyPos, double time [], double accelX [], double accelY [], MPU9250* accel, int numLines, double veloX [], double veloY [], double posX [], double posY []);
 
 #endif
