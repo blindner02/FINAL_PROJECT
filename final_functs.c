@@ -137,6 +137,13 @@ void toStructs(FILE* accelFile, FILE* gryoFile, FILE* baroFile, MPU9250 accelera
 }
 
 void toArrays(double time [], double baroAlt [], MPU9250* accel, GYRO* gyro, BMP390* baro, double* allAccel [], double* allGyro [], int numLines){
+	int g = 0;
+	double delta_timeR;
+	double delta_timeP;
+	double delta_timeY;
+	double delta_angleR;
+	double delta_angleP;
+	double delta_angleY;
 	double* accelX = (double*)malloc(sizeof(double) * numLines);
 	double* accelY = (double*)malloc(sizeof(double) * numLines);
 	double* accelZ = (double*)malloc(sizeof(double) * numLines);
@@ -169,9 +176,30 @@ void toArrays(double time [], double baroAlt [], MPU9250* accel, GYRO* gyro, BMP
 			baroAlt[i] = baro[i].altitude / 100;
 			baro[i].altitude = baroAlt[i];
 
-			gyroRoll[i] = gyro[i].angleRoll;
-			gyroPitch[i] = gyro[i].anglePitch;
-			gyroYaw[i] = gyro[i].angleYaw;
+			if(i > 0){
+				delta_timeR = time[i] - time[i - 1];
+				delta_angleR = gyro[g].angleRoll * delta_timeR; 
+				if(g == 0){
+					gyroRoll[g] = delta_angleR;
+				}
+				gyroRoll[g] = delta_angleR + gyroRoll[g - 1];
+
+				delta_timeP = time[i] - time[i - 1];
+				delta_angleP = gyro[g].anglePitch * delta_timeP; 
+				if(g == 0){
+					gyroPitch[g] = delta_angleP;
+				}
+				gyroPitch[g] = delta_angleP + gyroPitch[g - 1];
+
+				delta_timeY = time[i] - time[i - 1];
+				delta_angleY = gyro[g].angleYaw * delta_timeY; 
+				if(g == 0){
+					gyroYaw[g] = delta_angleY;
+				}
+				gyroYaw[g] = delta_angleY + gyroYaw[g - 1];
+
+				g++;
+			}
 
 	}
 
