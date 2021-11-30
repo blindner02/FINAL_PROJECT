@@ -45,6 +45,9 @@ void plotData(char* title, char* xAxis, char* yAxis, char* fileName, double xs [
 	if(strcmp(title, "Y - Acceleration") == 0){
 		settings->title = L"Y - Acceleration";
 	}
+	if(strcmp(title, "Z - Acceleration") == 0){
+		settings->title = L"Z - Acceleration";
+	}
 	if(strcmp(title, "Barometric Altitude") == 0){
 		settings->title = L"Barometric Altitude";
 	}
@@ -65,8 +68,8 @@ void plotData(char* title, char* xAxis, char* yAxis, char* fileName, double xs [
 	if(strcmp(yAxis, "velocity (m/s)") == 0){
 		settings->yLabel = L"velocity (m/s)";
 	}
-	if(strcmp(yAxis, "altitude (ft)") == 0){
-		settings->yLabel = L"altitude (ft)";
+	if(strcmp(yAxis, "altitude (m)") == 0){
+		settings->yLabel = L"altitude (m)";
 	}
     settings->yLabelLength = wcslen(settings->yLabel);
 	ScatterPlotSeries *s [] = {series};
@@ -116,9 +119,7 @@ int countLines(FILE* fp){
 
 // OUTSOURCING DATA FILES FROM ROCKETRY COMMUNITY (trying to at least)
 void toStructs(FILE* accelFile, FILE* gryoFile, FILE* baroFile, MPU9250 acceleration[], GYRO gyroAll[], BMP390 baro[], int numLines){
-	double value = 0.0;
 	int count = 0;
-	int i = 0;
 	char line[MAX_LINE_LENGTH];
 	fgets(line, MAX_LINE_LENGTH, accelFile);
 	fgets(line, MAX_LINE_LENGTH, gryoFile);
@@ -135,7 +136,14 @@ void toStructs(FILE* accelFile, FILE* gryoFile, FILE* baroFile, MPU9250 accelera
 	}
 }
 
-void toArrays(double time [], double accelX [], double accelY [], double accelZ [], MPU9250* accel, int numLines){
+void toArrays(double time [], double baroAlt [], MPU9250* accel, GYRO* gyro, BMP390* baro, double* allAccel [], double* allGyro [], int numLines){
+	double* accelX = (double*)malloc(sizeof(double) * numLines);
+	double* accelY = (double*)malloc(sizeof(double) * numLines);
+	double* accelZ = (double*)malloc(sizeof(double) * numLines);
+	double* gyroRoll = (double*)malloc(sizeof(double) * numLines);
+	double* gyroPitch = (double*)malloc(sizeof(double) * numLines);
+	double* gyroYaw = (double*)malloc(sizeof(double) * numLines);
+	
 	for(int i = 0; i < numLines; i++){
 		time[i] = accel[i].time;
 
@@ -157,9 +165,28 @@ void toArrays(double time [], double accelX [], double accelY [], double accelZ 
 		}*/
 			accelZ[i] = ((accel[i].accelZ / 2023) * 9.80665) - 9.80665;
 			accel[i].accelZ = accelZ[i];
+
+			baroAlt[i] = baro[i].altitude / 100;
+			baro[i].altitude = baroAlt[i];
+
+			gyroRoll[i] = gyro[i].angleRoll;
+			gyroPitch[i] = gyro[i].anglePitch;
+			gyroYaw[i] = gyro[i].angleYaw;
+
 	}
+
+	allAccel[0] = time;
+	allAccel[1] = accelX;
+	allAccel[2] = accelY;
+	allAccel[3] = accelZ;
+
+	allGyro[0] = gyroRoll;
+	allGyro[1] = gyroPitch;
+	allGyro[2] = gyroYaw;
+
+	printf("%lf %lf %lf %lf\n", allAccel[0][0], allAccel[1][0], allAccel[2][0], allAccel[3][0]);
 }
-position findVelAndPos(position xyPos, MPU9250* accel, GYRO* gyroMeasure, int numLines, double posX [], double posY []){
+position findVelAndPos(position xyPos, double* accel[], double* gyro[], double* baro, int numLines, double posX [], double posY []){
 	//double dispX = 0.0;
 	//double dispY = 0.0;
 
