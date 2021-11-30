@@ -32,7 +32,7 @@ int main(){
 	double* veloY = (double*)malloc(sizeof(double) * numLines - 1);
 	double* posX = (double*)malloc(sizeof(double) * numLines - 2);
 	double* posY = (double*)malloc(sizeof(double) * numLines - 2);
-
+	
 	position xyPos;
 
     toAccelStruct(test, accel, numLines);
