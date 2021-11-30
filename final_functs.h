@@ -13,7 +13,15 @@ typedef struct MPU9250{
     double time;
     double accelX;
     double accelY;
+    double accelZ;
 }MPU9250;
+
+typedef struct GYRO{
+    double time;
+    double angleRoll;
+    double anglePitch;
+    double angleYaw;
+}GYRO;
 
 typedef struct BMP390{
     double altitude;
@@ -38,10 +46,10 @@ FILE* openFile(char* fileName);
 
 int countLines(FILE* fileName);
 
-void toAccelStruct(FILE* fileName, MPU9250 acceleration[], int numLines);
+void toStructs(FILE* accelFile, FILE* gryoFile, FILE* baroFile, MPU9250 acceleration[], GYRO gyroAll[], BMP390 baro[], int numLines);
 
-void toArrays(double time [], double accelX [], double accelY [], MPU9250* accel, int numLines);
+void toArrays(double time [], double accelX [], double accelY [], double accelZ [], MPU9250* accel, int numLines);
 
-position findVelAndPos(position xyPos, double time [], double accelX [], double accelY [], MPU9250* accel, int numLines, double veloX [], double veloY [], double posX [], double posY []);
+position findVelAndPos(position xyPos, MPU9250* accel, GYRO* gyroMeasure, int numLines, double posX [], double posY []);
 
 #endif

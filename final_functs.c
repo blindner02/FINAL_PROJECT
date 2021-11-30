@@ -115,45 +115,60 @@ int countLines(FILE* fp){
 }
 
 // OUTSOURCING DATA FILES FROM ROCKETRY COMMUNITY (trying to at least)
-void toAccelStruct(FILE* inFile, MPU9250 acceleration[], int numLines){
+void toStructs(FILE* accelFile, FILE* gryoFile, FILE* baroFile, MPU9250 acceleration[], GYRO gyroAll[], BMP390 baro[], int numLines){
 	double value = 0.0;
 	int count = 0;
 	int i = 0;
 	char line[MAX_LINE_LENGTH];
-	fgets(line, MAX_LINE_LENGTH, inFile);
-	printf("%8s %8s %8s\n", "time (s)", "x-accel", "y-accel");
+	fgets(line, MAX_LINE_LENGTH, accelFile);
+	fgets(line, MAX_LINE_LENGTH, gryoFile);
+	fgets(line, MAX_LINE_LENGTH, baroFile);
+	printf("%8s %8s %8s %8s\n", "time (s)", "x-accel", "y-accel", "z-accel");
 	while(count < numLines){
-		fscanf(inFile, "%lf,%lf,%lf", &acceleration[count].time, &acceleration[count].accelX, &acceleration[count].accelY);
-		if(count % 1000 == 0){
-			printf("%lf %lf %lf \n", acceleration[count].time, 9.80665 * acceleration[count].accelX, 9.80665 * acceleration[count].accelY);
+		fscanf(accelFile, "%lf,%lf,%lf,%lf", &acceleration[count].time, &acceleration[count].accelX, &acceleration[count].accelY, &acceleration[count].accelZ);
+		fscanf(gryoFile, "%lf,%lf,%lf,%lf", &gyroAll[count].time, &gyroAll[count].angleRoll, &gyroAll[count].anglePitch, &gyroAll[count].angleYaw);
+		fscanf(baroFile, "%lf,%lf", &baro[count].time, &baro[count].altitude);
+		if(count % 10000 == 0){
+			printf("%lf %lf %lf %lf\n", acceleration[count].time, (acceleration[count].accelX / 2023) * 9.80665, (acceleration[count].accelY / 2023) * 9.80665, (acceleration[count].accelZ / 2023) * 9.80665);
 		}
 		count++;
 	}
 }
 
-void toArrays(double time [], double accelX [], double accelY [], MPU9250* accel, int numLines){
+void toArrays(double time [], double accelX [], double accelY [], double accelZ [], MPU9250* accel, int numLines){
 	for(int i = 0; i < numLines; i++){
 		time[i] = accel[i].time;
 
 		// FILTER OUT THE OUTLIERS TO AN EXTENT
 		// CONVERT THE DATA FROM G's TO (m/s/s)
-		if(9.80665 * accel[i].accelX < 150.0 && 9.80665 * accel[i].accelX > -150.0){
-			accelX[i] = 9.80665 * accel[i].accelX;
-		}
-		else{
+		//if(9.80665 * accel[i].accelX < 150.0 && 9.80665 * accel[i].accelX > -150.0){
+			accelX[i] = (accel[i].accelX / 2023) * 9.80665;
+			accel[i].accelX = accelX[i];
+		//}
+		/*else{
 			accelX[i] = 0.0;
-		}
-		if(9.80665 * accel[i].accelY < 150.0 && 9.80665 * accel[i].accelY > -150.0){
-			accelY[i] = 9.80665 * accel[i].accelY;
-		}
-		else{
+		}*/
+		//if(9.80665 * accel[i].accelY < 150.0 && 9.80665 * accel[i].accelY > -150.0){
+			accelY[i] = (accel[i].accelY / 2023) * 9.80665;
+			accel[i].accelY = accelY[i];
+		//}
+		/*else{
 			accelY[i] = 0.0;
-		}
+		}*/
+			accelZ[i] = ((accel[i].accelZ / 2023) * 9.80665) - 9.80665;
+			accel[i].accelZ = accelZ[i];
 	}
 }
-position findVelAndPos(position xyPos, double time [], double accelX [], double accelY [], MPU9250* accel, int numLines, double veloX [], double veloY [], double posX [], double posY []){
-	double dispX = 0.0;
-	double dispY = 0.0;
+position findVelAndPos(position xyPos, MPU9250* accel, GYRO* gyroMeasure, int numLines, double posX [], double posY []){
+	//double dispX = 0.0;
+	//double dispY = 0.0;
+
+
+
+
+
+
+	/*
 	for(int i = 0; i < numLines - 1; i++){
 		veloX[i] = 0.5 * (time[i + 1] - time[i]) * (accelX[i + 1] + accelX[i]);
 	}
@@ -167,8 +182,8 @@ position findVelAndPos(position xyPos, double time [], double accelX [], double 
 	for(int i = 0; i < numLines - 2; i++){
 		posY[i] = 0.5 * (time[i + 1] - time[i]) * (veloY[i + 1] + veloY[i]);
 		dispY = dispY + (0.5 * (time[i + 1] - time[i]) * (veloY[i + 1] + veloY[i]));
-	}
-	xyPos.xpos = dispX;
-	xyPos.ypos = dispY;
+	}*/
+	//xyPos.xpos = dispX;
+	//xyPos.ypos = dispY;
 	return (xyPos);
 }
