@@ -3,12 +3,13 @@
  * Name: Brandon Lindner
  * Section: T1B-T2B
  * Project: FINAL PROJECT
- * Purpose: PARSE FLIGHT FILES FROM A ROCKET AND FIND ESSENTIAL DATA AND GRAPH IT
+ * Purpose: PARSE FLIGHT FILES FROM A ROCKET/DRONE AND FIND ESSENTIAL DATA AND GRAPH IT
  * =========================================================== */ 
 
 #ifndef FINAL_PROJECT_FUNCTS
 #define FINAL_PROJECT_FUNCTS
 #define MAX_LINE_LENGTH 1024
+#define MAX_FILE_NAME_LENGTH 100
 typedef struct MPU9250{
     double time;
     double accelX;
@@ -50,6 +51,8 @@ void toStructs(FILE* accelFile, FILE* gryoFile, FILE* baroFile, MPU9250 accelera
 
 void toArrays(double time [], double baroAlt [], MPU9250* accel, GYRO* gyro, BMP390* baro, double* allAccel [], double* allGyro [], int numLines);
 
-position findVelAndPos(position xyPos, double* accel[], double* gyro[], double* baro, int numLines, double posX [], double posY []);
+position findVelAndPos(position xyPos, double* accel[], double* gyro[], double* baro, int numLines);
+
+void findGridSquare(position xyPos, char* gridSquare);
 
 #endif
