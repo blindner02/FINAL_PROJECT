@@ -203,7 +203,7 @@ void toArrays(double time [], double baroAlt [], MPU9250* accel, GYRO* gyro, BMP
 	allGyro[1] = gyroPitch;
 	allGyro[2] = gyroYaw;
 
-	// My attempt at some sort of a filter
+	// My attempt at some sort of a filter (It kind of works!)
 	double offsetR = gyroRoll[numLines - 2] / time[numLines - 1];
 	double offsetP = gyroPitch[numLines - 2] / time[numLines - 1];
 	double offsetY = gyroYaw[numLines - 2] / time[numLines - 1];
@@ -237,16 +237,13 @@ position findVelAndPos(position xyPos, double* accel[], double* gyro[], double* 
 
 	double* xAccel = (double*)malloc(sizeof(double) * numLines - 2);
 	double* yAccel = (double*)malloc(sizeof(double) * numLines - 2);
-	double* zAccel = (double*)malloc(sizeof(double) * numLines - 2);
 
 	double* veloX = (double*)malloc(sizeof(double) * numLines - 3);
 	double* veloY = (double*)malloc(sizeof(double) * numLines - 3);
-	double* veloZ = (double*)malloc(sizeof(double) * numLines - 3);
 
 	for(int i = 0; i < numLines - 2; i++){
 		xAccel[i] = (accel[3][i] * sin(gyro[0][i] + 180)) + (accel[1][i] * cos(gyro[2][i])) + (accel[2][i] * sin(gyro[2][i] + 180));
 		yAccel[i] = (accel[3][i] * sin(gyro[1][i] + 180)) + (accel[2][i] * cos(gyro[2][i])) + (accel[1][i] * sin(gyro[2][i]));
-		zAccel[i] = (accel[3][i] * cos(gyro[1][i])) + (accel[3][i] * cos(gyro[0][i]));
 	}
 	for(int i = 0; i < numLines - 3; i++){
 		veloX[i] = 0.5 * (accel[0][i + 1] - accel[0][i]) * (xAccel[i + 1] + xAccel[i]);
@@ -262,140 +259,30 @@ position findVelAndPos(position xyPos, double* accel[], double* gyro[], double* 
 	}
 	xyPos.xpos = dispX * 100;
 	xyPos.ypos = dispY * 100;
+
+	free(xAccel);
+	free(yAccel);
+	free(veloX);
+	free(veloY);
+
 	return (xyPos);
 }
 
 void findGridSquare(position xyPos, char* gridSquare){
 	char letter = 'A';
-	char num = '1';
-	/*for(int i = -10; i < 10; i++){
-		if(xyPos.xpos > i && xyPos.xpos < i + 1){
-			printf("%d", i);
+	char num[10];
+	int intNum = 20;
+	for(int i = -10; i < 10; i++){
+		if(xyPos.xpos > (double)i && xyPos.xpos < (double)i + 1.0){
 			strcat(gridSquare, &letter);
 		}
 		letter++;
-	}*/
-
-	if(xyPos.xpos > -10.0 && xyPos.xpos < -9.0){
-		strcat(gridSquare, "A");
 	}
-	if(xyPos.xpos > -9.0 && xyPos.xpos < -8.0){
-		strcat(gridSquare, "B");
-	}
-	if(xyPos.xpos > -8.0 && xyPos.xpos < -7.0){
-		strcat(gridSquare, "C");
-	}
-	if(xyPos.xpos > -7.0 && xyPos.xpos < -6.0){
-		strcat(gridSquare, "D");
-	}
-	if(xyPos.xpos > -6.0 && xyPos.xpos < -5.0){
-		strcat(gridSquare, "E");
-	}
-	if(xyPos.xpos > -5.0 && xyPos.xpos < -4.0){
-		strcat(gridSquare, "F");
-	}
-	if(xyPos.xpos > -4.0 && xyPos.xpos < -3.0){
-		strcat(gridSquare, "G");
-	}
-	if(xyPos.xpos > -3.0 && xyPos.xpos < -2.0){
-		strcat(gridSquare, "H");
-	}
-	if(xyPos.xpos > -2.0 && xyPos.xpos < -1.0){
-		strcat(gridSquare, "I");
-	}
-	if(xyPos.xpos > -1.0 && xyPos.xpos < 0.0){
-		strcat(gridSquare, "J");
-	}
-	if(xyPos.xpos > 0.0 && xyPos.xpos < 1.0){
-		strcat(gridSquare, "K");
-	}
-	if(xyPos.xpos > 1.0 && xyPos.xpos < 2.0){
-		strcat(gridSquare, "L");
-	}
-	if(xyPos.xpos > 2.0 && xyPos.xpos < 3.0){
-		strcat(gridSquare, "M");
-	}
-	if(xyPos.xpos > 3.0 && xyPos.xpos < 4.0){
-		strcat(gridSquare, "N");
-	}
-	if(xyPos.xpos > 4.0 && xyPos.xpos < 5.0){
-		strcat(gridSquare, "O");
-	}
-	if(xyPos.xpos > 5.0 && xyPos.xpos < 6.0){
-		strcat(gridSquare, "P");
-	}
-	if(xyPos.xpos > 6.0 && xyPos.xpos < 7.0){
-		strcat(gridSquare, "Q");
-	}
-	if(xyPos.xpos > 7.0 && xyPos.xpos < 8.0){
-		strcat(gridSquare, "R");
-	}
-	if(xyPos.xpos > 8.0 && xyPos.xpos < 9.0){
-		strcat(gridSquare, "S");
-	}
-	if(xyPos.xpos > 9.0 && xyPos.xpos < 10.0){
-		strcat(gridSquare, "T");
-	}
-
-	
-	if(xyPos.ypos > -10.0 && xyPos.ypos < -9.0){
-		strcat(gridSquare, "1");
-	}
-	if(xyPos.ypos > -9.0 && xyPos.ypos < -8.0){
-		strcat(gridSquare, "2");
-	}
-	if(xyPos.ypos > -8.0 && xyPos.ypos < -7.0){
-		strcat(gridSquare, "3");
-	}
-	if(xyPos.ypos > -7.0 && xyPos.ypos < -6.0){
-		strcat(gridSquare, "4");
-	}
-	if(xyPos.ypos > -6.0 && xyPos.ypos < -5.0){
-		strcat(gridSquare, "5");
-	}
-	if(xyPos.ypos > -5.0 && xyPos.ypos < -4.0){
-		strcat(gridSquare, "6");
-	}
-	if(xyPos.ypos > -4.0 && xyPos.ypos < -3.0){
-		strcat(gridSquare, "7");
-	}
-	if(xyPos.ypos > -3.0 && xyPos.ypos < -2.0){
-		strcat(gridSquare, "8");
-	}
-	if(xyPos.ypos > -2.0 && xyPos.ypos < -1.0){
-		strcat(gridSquare, "9");
-	}
-	if(xyPos.ypos > -1.0 && xyPos.ypos < 0.0){
-		strcat(gridSquare, "10");
-	}
-	if(xyPos.ypos > 0.0 && xyPos.ypos < 1.0){
-		strcat(gridSquare, "11");
-	}
-	if(xyPos.ypos > 1.0 && xyPos.ypos < 2.0){
-		strcat(gridSquare, "12");
-	}
-	if(xyPos.ypos > 2.0 && xyPos.ypos < 3.0){
-		strcat(gridSquare, "13");
-	}
-	if(xyPos.ypos > 3.0 && xyPos.ypos < 4.0){
-		strcat(gridSquare, "14");
-	}
-	if(xyPos.ypos > 4.0 && xyPos.ypos < 5.0){
-		strcat(gridSquare, "15");
-	}
-	if(xyPos.ypos > 5.0 && xyPos.ypos < 6.0){
-		strcat(gridSquare, "16");
-	}
-	if(xyPos.ypos > 6.0 && xyPos.ypos < 7.0){
-		strcat(gridSquare, "17");
-	}
-	if(xyPos.ypos > 7.0 && xyPos.ypos < 8.0){
-		strcat(gridSquare, "18");
-	}
-	if(xyPos.ypos > 8.0 && xyPos.ypos < 9.0){
-		strcat(gridSquare, "19");
-	}
-	if(xyPos.ypos > 9.0 && xyPos.ypos < 10.0){
-		strcat(gridSquare, "20");
+	for(int k = -10; k < 10; k++){
+		if(xyPos.ypos > (double)k && xyPos.ypos < (double)k + 1.0){
+			sprintf(num, "%d", intNum);
+			strcat(gridSquare, num);
+		}
+		intNum--;
 	}
 }

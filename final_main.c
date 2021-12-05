@@ -21,21 +21,21 @@ int main(){
 	FILE* gyroFile;
 	FILE* baroFile;
 
-	char inAccel[MAX_FILE_NAME_LENGTH];
-	char inGyro[MAX_FILE_NAME_LENGTH];
-	char inBaro[MAX_FILE_NAME_LENGTH];
+	// char inAccel[MAX_FILE_NAME_LENGTH];
+	// char inGyro[MAX_FILE_NAME_LENGTH];
+	// char inBaro[MAX_FILE_NAME_LENGTH];
 	
-	printf("Enter the name of a properly formatted acceleration data .csv : ");
-	scanf("%s", inAccel);
-	printf("Enter the name of a properly formatted gyroscopic data .csv : ");
-	scanf("%s", inGyro);
-	printf("Enter the name of a properly formatted barometric pressure .csv : ");
-	scanf("%s", inBaro);
-	/*
+	// printf("Enter the name of a properly formatted acceleration data .csv : ");
+	// scanf("%s", inAccel);
+	// printf("Enter the name of a properly formatted gyroscopic data .csv : ");
+	// scanf("%s", inGyro);
+	// printf("Enter the name of a properly formatted barometric pressure .csv : ");
+	// scanf("%s", inBaro);
+	
 	char* inAccel = "accel_test.csv";
 	char* inGyro = "gyro_test.csv";
 	char* inBaro = "baro_test.csv";
-	*/
+	
     accelFile = openFile(inAccel);
 
 	int numLines = countLines(accelFile);
@@ -77,11 +77,20 @@ int main(){
 	plotData("X - Acceleration", "time (s)", "acceleration (m/s/s)", "xAccel.png", time, allAccel[1], numLines);
 	plotData("Y - Acceleration", "time (s)", "acceleration (m/s/s)", "yAccel.png", time, allAccel[2], numLines);
 	plotData("Z - Acceleration", "time (s)", "acceleration (m/s/s)", "zAccel.png", time, allAccel[3], numLines);
-	plotData("Barometric Altitde", "time (s)", "altitude (m)", "baroAlt.png", time, baroAlt, numLines);
-	plotData("Barometric Altitde", "time (s)", "altitude (m)", "gyroRoll.png", time, allGyro[0], numLines - 1);
+	plotData("Barometric Altitude", "time (s)", "altitude (m)", "baroAlt.png", time, baroAlt, numLines);
 	xyPos = findVelAndPos(xyPos, allAccel, allGyro, baroAlt, numLines);
 	printf("\n");
 	printf("X - Position (m): %lf\nY - Position (m): %lf\n", xyPos.xpos, xyPos.ypos);
 	findGridSquare(xyPos, gridSquare);
 	printf("Grid Square: %s\n", gridSquare);
+	
+	free(bigAccel);
+	free(gyroAll);
+	free(baro);
+	free(time);
+	free(baroAlt);
+	free(allAccel);
+	free(allGyro);
+
+	exit(0);
 }
