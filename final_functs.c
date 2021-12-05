@@ -3,7 +3,7 @@
  * Name: Brandon Lindner
  * Section: T1B-T2B
  * Project: FINAL PROJECT
- * Purpose: PARSE FLIGHT DATA FILES FROM A ROCKET AND FIND ESSENTIAL DATA AND GRAPH IT
+ * Purpose: PARSE FLIGHT DATA FILES FROM A ROCKET/DRONE AND FIND/CALCULATE ESSENTIAL DATA AND GRAPH IT
  * =========================================================== */ 
 
 #include <stdlib.h>
@@ -121,17 +121,21 @@ int countLines(FILE* fp){
 void toStructs(FILE* accelFile, FILE* gryoFile, FILE* baroFile, MPU9250 acceleration[], GYRO gyroAll[], BMP390 baro[], int numLines){
 	int count = 0;
 	char line[MAX_LINE_LENGTH];
+	// get rid of the titles for each of the csv files so it starts parsing at the actual data
 	fgets(line, MAX_LINE_LENGTH, accelFile);
 	fgets(line, MAX_LINE_LENGTH, gryoFile);
 	fgets(line, MAX_LINE_LENGTH, baroFile);
-	//printf("%8s %8s %8s %8s\n", "time (s)", "x-accel", "y-accel", "z-accel");
+
 	while(count < numLines){
 		fscanf(accelFile, "%lf,%lf,%lf,%lf", &acceleration[count].time, &acceleration[count].accelX, &acceleration[count].accelY, &acceleration[count].accelZ);
 		fscanf(gryoFile, "%lf,%lf,%lf,%lf", &gyroAll[count].time, &gyroAll[count].angleRoll, &gyroAll[count].anglePitch, &gyroAll[count].angleYaw);
 		fscanf(baroFile, "%lf,%lf", &baro[count].time, &baro[count].altitude);
+		
+		// print out every 10000th value to make sure arrays are being filled
 		/*if(count % 10000 == 0){
 			printf("%lf %lf %lf %lf\n", acceleration[count].time, (acceleration[count].accelX / 2023) * 9.80665, (acceleration[count].accelY / 2023) * 9.80665, (acceleration[count].accelZ / 2023) * 9.80665);
 		}*/
+		
 		count++;
 	}
 }
@@ -219,12 +223,12 @@ void toArrays(double time [], double baroAlt [], MPU9250* accel, GYRO* gyro, BMP
 	allGyro[2] = gyroYaw;
 
 	
-//expected to have some deviation because of integration so print out the calculated offset
+//expected to have some deviation because of integration so print out the calculated offset (TEST)
 	/*
 	printf("Offsets: %lf %lf %lf\n", offsetR, offsetP, offsetY);
 	*/
 
-//comparing the calculated values to the raw data values to ensure continuity
+//comparing the calculated values to the EXPECTED data values to ensure continuity (TEST)
 	/*
 	printf("%lf %lf %lf %lf\n", allAccel[0][0], allAccel[1][0], allAccel[2][0], allAccel[3][0]);
 	printf("%lf %lf %lf\n", allGyro[0][100], allGyro[1][100], allGyro[2][100]);

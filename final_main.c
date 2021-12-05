@@ -3,8 +3,11 @@
  * Name: Brandon Lindner
  * Section: T1B-T2B
  * Project: FINAL PROJECT
- * Purpose: PARSE FLIGHT DATA FILES FROM A ROCKET AND FIND ESSENTIAL DATA AND GRAPH IT
- * Documentation: NONE
+ * Purpose: PARSE FLIGHT DATA FILES FROM A ROCKET/DRONE AND FIND/CALCULATE ESSENTIAL DATA AND GRAPH IT
+ * Documentation: C3C Ameen Khan assisted me in passing the two-dimensional arrays into the plotData function
+ * 				  C3C Luke Ringe assisted me in parsing my csv files and the proper syntax for the fscanf 
+ * 				  Maj Birrer assisted in trying to figure out why the end of my findGridSquare function was 
+ * 				  giving a *** stack smashing detected *** error
  * =========================================================== */ 
 
 #include <stdlib.h>
@@ -21,24 +24,26 @@ int main(){
 	FILE* gyroFile;
 	FILE* baroFile;
 
-	// char inAccel[MAX_FILE_NAME_LENGTH];
-	// char inGyro[MAX_FILE_NAME_LENGTH];
-	// char inBaro[MAX_FILE_NAME_LENGTH];
+	char inAccel[MAX_FILE_NAME_LENGTH];
+	char inGyro[MAX_FILE_NAME_LENGTH];
+	char inBaro[MAX_FILE_NAME_LENGTH];
 	
-	// printf("Enter the name of a properly formatted acceleration data .csv : ");
-	// scanf("%s", inAccel);
-	// printf("Enter the name of a properly formatted gyroscopic data .csv : ");
-	// scanf("%s", inGyro);
-	// printf("Enter the name of a properly formatted barometric pressure .csv : ");
-	// scanf("%s", inBaro);
-	
-	char* inAccel = "accel_test.csv";
-	char* inGyro = "gyro_test.csv";
-	char* inBaro = "baro_test.csv";
+	printf("Enter the name of a properly formatted acceleration data .csv : ");
+	scanf("%s", inAccel);
+	printf("Enter the name of a properly formatted gyroscopic data .csv : ");
+	scanf("%s", inGyro);
+	printf("Enter the name of a properly formatted barometric pressure .csv : ");
+	scanf("%s", inBaro);
+
+// Test code	
+	// char* inAccel = "accel_test.csv";
+	// char* inGyro = "gyro_test.csv";
+	// char* inBaro = "baro_test.csv";
 	
     accelFile = openFile(inAccel);
 
 	int numLines = countLines(accelFile);
+// Test code
 	// int numLines = 100000;
 	numLines = numLines - 1;
 	printf("Number of items: %d\n", numLines);

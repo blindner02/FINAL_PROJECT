@@ -3,7 +3,7 @@
  * Name: Brandon Lindner
  * Section: T1B-T2B
  * Project: FINAL PROJECT
- * Purpose: PARSE FLIGHT FILES FROM A ROCKET/DRONE AND FIND ESSENTIAL DATA AND GRAPH IT
+ * Purpose: PARSE FLIGHT FILES FROM A ROCKET/DRONE AND FIND/CALCULATE ESSENTIAL DATA AND GRAPH IT
  * =========================================================== */ 
 
 #ifndef FINAL_PROJECT_FUNCTS
