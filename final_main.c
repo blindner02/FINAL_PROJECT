@@ -84,5 +84,4 @@ int main(){
 	printf("X - Position (m): %lf\nY - Position (m): %lf\n", xyPos.xpos, xyPos.ypos);
 	findGridSquare(xyPos, gridSquare);
 	printf("Grid Square: %s\n", gridSquare);
-	//plotData("X - Velocity", "time (s)", "velocity (m/s)", "test.png", time, veloX, numLines - 2);
 }
