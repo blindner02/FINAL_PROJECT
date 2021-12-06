@@ -277,6 +277,18 @@ void findGridSquare(position xyPos, char* gridSquare){
 	char letter = 'A';
 	char num[10];
 	int intNum = 20;
+
+// Failsafe	
+	if(xyPos.xpos > 10.0 || xyPos.xpos < -10.0){
+		fprintf(stderr, "X displacement is out of grid range.\n");
+		exit(-1);
+	}
+// Failsafe	
+	if(xyPos.ypos > 10.0 || xyPos.ypos < -10.0){
+		fprintf(stderr, "Y displacement is out of grid range.\n");
+		exit(-1);
+	}
+
 	for(int i = -10; i < 10; i++){
 		if(xyPos.xpos > (double)i && xyPos.xpos < (double)i + 1.0){
 			strcat(gridSquare, &letter);

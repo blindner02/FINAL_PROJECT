@@ -24,31 +24,41 @@ int main(){
 	FILE* gyroFile;
 	FILE* baroFile;
 
-// Test code	
+/* Test code	
 	char* inAccel = "accel_test.csv";
 	char* inGyro = "gyro_test.csv";
 	char* inBaro = "baro_test.csv";
+*/
 
-	// char inAccel[MAX_FILE_NAME_LENGTH];
-	// char inGyro[MAX_FILE_NAME_LENGTH];
-	// char inBaro[MAX_FILE_NAME_LENGTH];
+// comment out this block ***
+	char inAccel[MAX_FILE_NAME_LENGTH];
+	char inGyro[MAX_FILE_NAME_LENGTH];
+	char inBaro[MAX_FILE_NAME_LENGTH];
 	
-	// printf("Enter the name of a properly formatted acceleration data .csv : ");
-	// scanf("%s", inAccel);
+	printf("Enter the name of a properly formatted acceleration data .csv : ");
+	scanf("%s", inAccel);
+
+// leave this	
 	accelFile = openFile(inAccel);
 
-	// printf("Enter the name of a properly formatted gyroscopic data .csv : ");
-	// scanf("%s", inGyro);
-	// gyroFile = openFile(inGyro);
+	printf("Enter the name of a properly formatted gyroscopic data .csv : ");
+	scanf("%s", inGyro);
 
-	// printf("Enter the name of a properly formatted barometric pressure .csv : ");
-	// scanf("%s", inBaro);
-	// baroFile = openFile(inBaro);
+// leave this	
+	gyroFile = openFile(inGyro);
 
+	printf("Enter the name of a properly formatted barometric pressure .csv : ");
+	scanf("%s", inBaro);
 
-	// int numLines = countLines(accelFile);
+// leave this
+	baroFile = openFile(inBaro);
+	
+/// *** to test
+
+	int numLines = countLines(accelFile);
+
 // Test code	
-	int numLines = 0;
+	// int numLines = 0;
 	numLines = numLines - 1;
 	printf("Number of items: %d\n", numLines);
 	if(numLines < 0){
@@ -56,8 +66,6 @@ int main(){
 		exit(-1);
 	}
 	fclose(accelFile);
-
-	
 
 	accelFile = openFile(inAccel);
 	gyroFile = openFile(inGyro);
