@@ -18,7 +18,7 @@
 #include "final_functs.h"
 
 void plotData(char* title, char* xAxis, char* yAxis, char* fileName, double xs [], double ys [], int numItems){
-    _Bool success;
+	_Bool success;
     StringReference *errorMessage;
 
 	ScatterPlotSeries *series = GetDefaultScatterPlotSeriesSettings();
@@ -90,12 +90,13 @@ void plotData(char* title, char* xAxis, char* yAxis, char* fileName, double xs [
             fprintf(stderr, "%c", errorMessage->string[i]);
         }
         fprintf(stderr, "\n");
+		exit(-1);
     }
 }
 
 FILE* openFile(char* fileName){
 	FILE* inFile = fopen(fileName, "r");
-	if (fileName == NULL){
+	if (inFile == NULL){
 		fprintf(stderr, "Could not open file \"%s\"", fileName);  
         fprintf(stderr, " - terminating\n"); 
 		exit(-1);
