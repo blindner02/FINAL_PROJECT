@@ -80,19 +80,20 @@ int main(){
 
 	char gridSquare[3];
 
-	
 
     toStructs(accelFile, gyroFile, baroFile, bigAccel, gyroAll, baro, numLines);
 
 	toArrays(time, baroAlt, bigAccel, gyroAll, baro, allAccel, allGyro, numLines);
-	
+
 
 	plotData("X - Acceleration", "time (s)", "acceleration (m/s/s)", "xAccel.png", time, allAccel[1], numLines);
 	plotData("Y - Acceleration", "time (s)", "acceleration (m/s/s)", "yAccel.png", time, allAccel[2], numLines);
 	plotData("Z - Acceleration", "time (s)", "acceleration (m/s/s)", "zAccel.png", time, allAccel[3], numLines);
 	plotData("Barometric Altitude", "time (s)", "altitude (m)", "baroAlt.png", time, baroAlt, numLines);
-	xyPos = findVelAndPos(xyPos, allAccel, allGyro, baroAlt, numLines);
+
 	printf("\n");
+
+	xyPos = findVelAndPos(xyPos, allAccel, allGyro, baroAlt, numLines);
 	printf("X - Position (m): %lf\nY - Position (m): %lf\n", xyPos.xpos, xyPos.ypos);
 	findGridSquare(xyPos, gridSquare);
 	printf("Grid Square: %s\n", gridSquare);
