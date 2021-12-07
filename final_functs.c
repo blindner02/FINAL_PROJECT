@@ -126,7 +126,7 @@ void toStructs(FILE* accelFile, FILE* gryoFile, FILE* baroFile, MPU9250 accelera
 	fgets(line, MAX_LINE_LENGTH, accelFile);
 	fgets(line, MAX_LINE_LENGTH, gryoFile);
 	fgets(line, MAX_LINE_LENGTH, baroFile);
-
+// Parse the data files and input the values into the structs
 	while(count < numLines){
 		fscanf(accelFile, "%lf,%lf,%lf,%lf", &acceleration[count].time, &acceleration[count].accelX, &acceleration[count].accelY, &acceleration[count].accelZ);
 		fscanf(gryoFile, "%lf,%lf,%lf,%lf", &gyroAll[count].time, &gyroAll[count].angleRoll, &gyroAll[count].anglePitch, &gyroAll[count].angleYaw);
@@ -198,7 +198,7 @@ void toArrays(double time [], double baroAlt [], MPU9250* accel, GYRO* gyro, BMP
 			g++;
 		}
 	}
-
+// Fill the large 2d arrays with the values to use in other functions
 	allAccel[0] = time;
 	allAccel[1] = accelX;
 	allAccel[2] = accelY;
@@ -208,7 +208,7 @@ void toArrays(double time [], double baroAlt [], MPU9250* accel, GYRO* gyro, BMP
 	allGyro[1] = gyroPitch;
 	allGyro[2] = gyroYaw;
 
-	// My attempt at some sort of a filter (It kind of works!)
+// My attempt at some sort of a filter (It kind of works!)
 	double offsetR = gyroRoll[numLines - 2] / time[numLines - 1];
 	double offsetP = gyroPitch[numLines - 2] / time[numLines - 1];
 	double offsetY = gyroYaw[numLines - 2] / time[numLines - 1];
@@ -245,7 +245,7 @@ position findVelAndPos(position xyPos, double* accel[], double* gyro[], double* 
 
 	double* veloX = (double*)malloc(sizeof(double) * numLines - 3);
 	double* veloY = (double*)malloc(sizeof(double) * numLines - 3);
-
+// CALCULATING THE POSITION BY TAKING THE TRAPEZOIDAL RIEMANN SUM AS AN INTEGRAL
 	for(int i = 0; i < numLines - 2; i++){
 		xAccel[i] = (accel[3][i] * sin(gyro[0][i] + 180)) + (accel[1][i] * cos(gyro[2][i])) + (accel[2][i] * sin(gyro[2][i] + 180));
 		yAccel[i] = (accel[3][i] * sin(gyro[1][i] + 180)) + (accel[2][i] * cos(gyro[2][i])) + (accel[1][i] * sin(gyro[2][i]));
@@ -277,8 +277,10 @@ void findGridSquare(position xyPos, char* gridSquare){
 	char letter = 'A';
 	char num[10];
 	int intNum = 20;
-	xyPos.xpos = 1.200;
-	xyPos.ypos = 10.056;
+	
+// test code	
+	// xyPos.xpos = 1.200;
+	// xyPos.ypos = 10.056;
 
 // Failsafe	
 	if(xyPos.xpos > 10.0 || xyPos.xpos < -10.0){
@@ -290,13 +292,14 @@ void findGridSquare(position xyPos, char* gridSquare){
 		fprintf(stderr, "Y displacement is out of grid range.\n");
 		exit(-1);
 	}
-
+// Check the x position for grid square
 	for(int i = -10; i < 10; i++){
 		if(xyPos.xpos > (double)i && xyPos.xpos < (double)i + 1.0){
 			strcat(gridSquare, &letter);
 		}
 		letter++;
 	}
+// Check the y position for grid square
 	for(int k = -10; k < 10; k++){
 		if(xyPos.ypos > (double)k && xyPos.ypos < (double)k + 1.0){
 			sprintf(num, "%d", intNum);

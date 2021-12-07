@@ -25,30 +25,30 @@ int main(){
 	FILE* baroFile;
 
 /* Test code */	
-	char* inAccel = "accel_test.csv";
-	char* inGyro = "gyro_test.csv";
-	char* inBaro = "baro_test.csv";
+	// char* inAccel = "accel_test.csv";
+	// char* inGyro = "gyro_test.csv";
+	// char* inBaro = "baro_test.csv";
 
 
 // comment out this block ***
-	// char inAccel[MAX_FILE_NAME_LENGTH];
-	// char inGyro[MAX_FILE_NAME_LENGTH];
-	// char inBaro[MAX_FILE_NAME_LENGTH];
+	char inAccel[MAX_FILE_NAME_LENGTH];
+	char inGyro[MAX_FILE_NAME_LENGTH];
+	char inBaro[MAX_FILE_NAME_LENGTH];
 	
-	// printf("Enter the name of a properly formatted acceleration data .csv : ");
-	// scanf("%s", inAccel);
+	printf("Enter the name of a properly formatted acceleration data .csv : ");
+	scanf("%s", inAccel);
 
 // leave this	
 	accelFile = openFile(inAccel);
 
-	// printf("Enter the name of a properly formatted gyroscopic data .csv : ");
-	// scanf("%s", inGyro);
+	printf("Enter the name of a properly formatted gyroscopic data .csv : ");
+	scanf("%s", inGyro);
 
 // leave this	
 	gyroFile = openFile(inGyro);
 
-	// printf("Enter the name of a properly formatted barometric pressure .csv : ");
-	// scanf("%s", inBaro);
+	printf("Enter the name of a properly formatted barometric pressure .csv : ");
+	scanf("%s", inBaro);
 
 // leave this
 	baroFile = openFile(inBaro);
