@@ -277,6 +277,8 @@ void findGridSquare(position xyPos, char* gridSquare){
 	char letter = 'A';
 	char num[10];
 	int intNum = 20;
+	xyPos.xpos = 1.200;
+	xyPos.ypos = 10.056;
 
 // Failsafe	
 	if(xyPos.xpos > 10.0 || xyPos.xpos < -10.0){
