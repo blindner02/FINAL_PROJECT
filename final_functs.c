@@ -212,7 +212,7 @@ void toArrays(double time [], double baroAlt [], MPU9250* accel, GYRO* gyro, BMP
 	double offsetR = gyroRoll[numLines - 2] / time[numLines - 1];
 	double offsetP = gyroPitch[numLines - 2] / time[numLines - 1];
 	double offsetY = gyroYaw[numLines - 2] / time[numLines - 1];
-
+// Apply the filter to the gyroscope values4
 	for(int j = 0; j < numLines - 1; j++){
 		gyroRoll[j] = gyroRoll[j] - (time[j] * offsetR);
 		gyroPitch[j] = gyroPitch[j] - (time[j] * offsetP);

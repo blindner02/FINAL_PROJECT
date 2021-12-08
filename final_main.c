@@ -93,7 +93,7 @@ int main(){
 
 	toArrays(time, baroAlt, bigAccel, gyroAll, baro, allAccel, allGyro, numLines);
 
-
+// Using pbPlots, plot the accel x, y, z, and baro data in their png files
 	plotData("X - Acceleration", "time (s)", "acceleration (m/s/s)", "xAccel.png", time, allAccel[1], numLines);
 	plotData("Y - Acceleration", "time (s)", "acceleration (m/s/s)", "yAccel.png", time, allAccel[2], numLines);
 	plotData("Z - Acceleration", "time (s)", "acceleration (m/s/s)", "zAccel.png", time, allAccel[3], numLines);
